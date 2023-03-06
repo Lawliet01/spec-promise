@@ -1,0 +1,16 @@
+{
+  "name": "spec-promise",
+  "version": "1.0.0",
+  "description": "一个完全基于标准搭建的promise（A fully specification-based promise）",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rollup src/index.js --file dist/bundle.js --format iife --no-treeshake",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^3.18.0"
+  }
+}
