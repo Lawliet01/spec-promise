@@ -58,7 +58,6 @@
 
         // 关于Realm的逻辑忽略
         return job
-        // 关于Realm的逻辑忽略
     }
 
     // import { CompletionRecord } from "./base.js"
@@ -107,7 +106,7 @@
          * 使用箭头函数是为了创建非constructor的函数
          * 使用(0, fn)是为了使得function.name为"" 
          * 标准内使用createBuildIn()实现上面两点
-         * 这里仅仅为了通过两个测试：
+         * 你完全可以忽略这个形式，这里仅仅为了通过两个测试：
          *      create-resolving-functions-reject.js
          *      create-resolving-functions-resolve.js
         **/
@@ -367,6 +366,7 @@
 
                     // 27.2.4.1.3 Promise.all Resolve Element Functions
                     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise.all
+                    // (0, ()=>{})写法的原因参考createResolvingFunction
                     const onFulfilled = (0, (x) => {
                         let F = onFulfilled;
                         if (F.AlreadyCalled) return undefined
@@ -483,6 +483,7 @@
 
                     // 27.2.4.2.2 Promise.allSettled Resolve Element Functions
                     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise.allsettled-resolve-element-functions
+                    // (0, ()=>{})写法的原因参考createResolvingFunction
                     const onFulfilled = (0, (x) => {
                         let F = onFulfilled;
                         if (F.AlreadyCalled.value) return undefined
@@ -515,6 +516,7 @@
 
                     // 27.2.4.2.3 Promise.allSettled Reject Element Functions
                     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise.allsettled-reject-element-functions
+                    // (0, ()=>{})写法的原因参考createResolvingFunction
                     const onRejected = (0, (x) => {
                         let F = onRejected;
                         if (F.AlreadyCalled.value) return undefined
@@ -637,6 +639,7 @@
 
                     // 27.2.4.3.2 Promise.any Reject Element Functions
                     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise.any-reject-element-functions
+                    // (0, ()=>{})写法的原因参考createResolvingFunction
                     const onRejected = (0, (x) => {
                         let F = onRejected;
                         if (F.AlreadyCalled) return undefined
@@ -826,7 +829,7 @@
         return array
     }
 
-    window.ES6Promise = Promise$1;
+    if (!window.Promise) window.Promise = Promise$1;
 
     return Promise$1;
 

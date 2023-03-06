@@ -38,7 +38,7 @@ fetch(URL) // 更换url
 
 更换不同的URL，就可以测试不同promise实现的代码：
 
-- spec-promise：
+- spec-promise：https://lawliet01.github.io/spec-promise/dist/bundle.js
 - [then/Promise](https://github.com/then/promise)：https://cdnjs.cloudflare.com/ajax/libs/promise-polyfill/8.3.0/polyfill.min.js
 - [es6-promise](https://github.com/stefanpenner/es6-promise)：https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js
 
