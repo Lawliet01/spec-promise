@@ -106,12 +106,12 @@ function createResolvingFunction(promise){
 // 27.2.1.4 FulfillPromise ( promise, value )
 // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-fulfillpromise
 function FulFillPromise(promise, value){
-    console.assert(promise.PromiseState === "pending")
-    let reactions = promise.PromiseFulfillReactions
-    promise.PromiseResult = value
-    promise.PromiseFulfillReactions = undefined
-    promise.PromiseRejectReactions = undefined
-    promise.PromiseState = "fulfilled"
+    console.assert(promise.__PromiseState === "pending")
+    let reactions = promise.__PromiseFulfillReactions
+    promise.__PromiseResult = value
+    promise.__PromiseFulfillReactions = undefined
+    promise.__PromiseRejectReactions = undefined
+    promise.__PromiseState = "fulfilled"
     TriggerPromiseReactions(reactions, value)
 }
 
@@ -141,20 +141,20 @@ function NewPromiseCapability(C){
 // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-ispromise
 function IsPromise(x){
     if (!(x instanceof Object)) return false
-    if (!Object.getOwnPropertyNames(x).includes('PromiseState')) return false
+    if (!Object.getOwnPropertyNames(x).includes('__PromiseState')) return false
     return true
 }
 
 // 27.2.1.7 RejectPromise ( promise, reason )
 // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-rejectpromise
 function RejectPromise(promise, reason){
-    console.assert(promise.PromiseState === "pending")
-    let reactions = promise.PromiseRejectReactions
+    console.assert(promise.__PromiseState === "pending")
+    let reactions = promise.__PromiseRejectReactions
     if (!reactions) debugger
-    promise.PromiseResult = reason
-    promise.PromiseFulfillReactions = undefined
-    promise.PromiseRejectReactions = undefined
-    promise.PromiseState = "rejected"
+    promise.__PromiseResult = reason
+    promise.__PromiseFulfillReactions = undefined
+    promise.__PromiseRejectReactions = undefined
+    promise.__PromiseState = "rejected"
     if (!promise.promiseIsHandled) HostPromiseRejectionTracker(promise, "reject")
     TriggerPromiseReactions(reactions, reason)
 }

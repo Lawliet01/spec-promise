@@ -159,12 +159,12 @@
     // 27.2.1.4 FulfillPromise ( promise, value )
     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-fulfillpromise
     function FulFillPromise(promise, value){
-        console.assert(promise.PromiseState === "pending");
-        let reactions = promise.PromiseFulfillReactions;
-        promise.PromiseResult = value;
-        promise.PromiseFulfillReactions = undefined;
-        promise.PromiseRejectReactions = undefined;
-        promise.PromiseState = "fulfilled";
+        console.assert(promise.__PromiseState === "pending");
+        let reactions = promise.__PromiseFulfillReactions;
+        promise.__PromiseResult = value;
+        promise.__PromiseFulfillReactions = undefined;
+        promise.__PromiseRejectReactions = undefined;
+        promise.__PromiseState = "fulfilled";
         TriggerPromiseReactions(reactions, value);
     }
 
@@ -194,20 +194,20 @@
     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-ispromise
     function IsPromise(x){
         if (!(x instanceof Object)) return false
-        if (!Object.getOwnPropertyNames(x).includes('PromiseState')) return false
+        if (!Object.getOwnPropertyNames(x).includes('__PromiseState')) return false
         return true
     }
 
     // 27.2.1.7 RejectPromise ( promise, reason )
     // https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-rejectpromise
     function RejectPromise(promise, reason){
-        console.assert(promise.PromiseState === "pending");
-        let reactions = promise.PromiseRejectReactions;
+        console.assert(promise.__PromiseState === "pending");
+        let reactions = promise.__PromiseRejectReactions;
         if (!reactions) debugger
-        promise.PromiseResult = reason;
-        promise.PromiseFulfillReactions = undefined;
-        promise.PromiseRejectReactions = undefined;
-        promise.PromiseState = "rejected";
+        promise.__PromiseResult = reason;
+        promise.__PromiseFulfillReactions = undefined;
+        promise.__PromiseRejectReactions = undefined;
+        promise.__PromiseState = "rejected";
         if (!promise.promiseIsHandled) HostPromiseRejectionTracker(promise, "reject");
         TriggerPromiseReactions(reactions, reason);
     }
@@ -235,10 +235,10 @@
             if (!new.target) throw new TypeError("Promise constructor cannot be invoked without 'new'")
             if (typeof executor !== 'function') throw new TypeError("Promise resolver  is not a function")
             
-            this.PromiseState = "pending";
-            this.PromiseFulfillReactions = [];
-            this.PromiseRejectReactions = [];
-            this.PromiseIsHandled = false;
+            this.__PromiseState = "pending";
+            this.__PromiseFulfillReactions = [];
+            this.__PromiseRejectReactions = [];
+            this.__PromiseIsHandled = false;
 
             let resolvingFunction = createResolvingFunction(this);
             try {
@@ -263,21 +263,21 @@
                 let fulfilledReaction = new PromiseReactionRecord(resultCapability,"Fulfill",onFulfilledJobCallback);
                 let rejectReaction = new PromiseReactionRecord(resultCapability, "Reject", onRejectedJobCallback);
             
-                if (promise.PromiseState === "pending"){
-                    promise.PromiseFulfillReactions.push(fulfilledReaction);
-                    promise.PromiseRejectReactions.push(rejectReaction);
-                } else if (promise.PromiseState === "fulfilled") {
-                    let value = promise.PromiseResult;
+                if (promise.__PromiseState === "pending"){
+                    promise.__PromiseFulfillReactions.push(fulfilledReaction);
+                    promise.__PromiseRejectReactions.push(rejectReaction);
+                } else if (promise.__PromiseState === "fulfilled") {
+                    let value = promise.__PromiseResult;
                     let fulfillJob = NewPromiseReactionJob(fulfilledReaction, value);
                     HostEnqueuePromiseJob(fulfillJob);
                 } else {
-                    console.assert(promise.PromiseState === "rejected");
-                    let reason = promise.PromiseResult;
+                    console.assert(promise.__PromiseState === "rejected");
+                    let reason = promise.__PromiseResult;
                     HostPromiseRejectionTracker(promise, "handler");
                     let rejectJob = NewPromiseReactionJob(rejectReaction, reason);
                     HostEnqueuePromiseJob(rejectJob);
                 }
-                promise.PromiseIsHandled = true;
+                promise.__PromiseIsHandled = true;
             
                 if (resultCapability === undefined) return undefined
                 return resultCapability.Promise

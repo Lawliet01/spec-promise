@@ -16,14 +16,15 @@ import {
 
 
 class Promise {
+
     constructor(executor){
         if (!new.target) throw new TypeError("Promise constructor cannot be invoked without 'new'")
         if (typeof executor !== 'function') throw new TypeError("Promise resolver  is not a function")
         
-        this.PromiseState = "pending"
-        this.PromiseFulfillReactions = []
-        this.PromiseRejectReactions = []
-        this.PromiseIsHandled = false
+        this.__PromiseState = "pending"
+        this.__PromiseFulfillReactions = []
+        this.__PromiseRejectReactions = []
+        this.__PromiseIsHandled = false
 
         let resolvingFunction = createResolvingFunction(this)
         try {
@@ -48,21 +49,21 @@ class Promise {
             let fulfilledReaction = new PromiseReactionRecord(resultCapability,"Fulfill",onFulfilledJobCallback)
             let rejectReaction = new PromiseReactionRecord(resultCapability, "Reject", onRejectedJobCallback)
         
-            if (promise.PromiseState === "pending"){
-                promise.PromiseFulfillReactions.push(fulfilledReaction)
-                promise.PromiseRejectReactions.push(rejectReaction)
-            } else if (promise.PromiseState === "fulfilled") {
-                let value = promise.PromiseResult
+            if (promise.__PromiseState === "pending"){
+                promise.__PromiseFulfillReactions.push(fulfilledReaction)
+                promise.__PromiseRejectReactions.push(rejectReaction)
+            } else if (promise.__PromiseState === "fulfilled") {
+                let value = promise.__PromiseResult
                 let fulfillJob = NewPromiseReactionJob(fulfilledReaction, value)
                 HostEnqueuePromiseJob(fulfillJob)
             } else {
-                console.assert(promise.PromiseState === "rejected")
-                let reason = promise.PromiseResult
+                console.assert(promise.__PromiseState === "rejected")
+                let reason = promise.__PromiseResult
                 HostPromiseRejectionTracker(promise, "handler")
                 let rejectJob = NewPromiseReactionJob(rejectReaction, reason)
                 HostEnqueuePromiseJob(rejectJob)
             }
-            promise.PromiseIsHandled = true
+            promise.__PromiseIsHandled = true
         
             if (resultCapability === undefined) return undefined
             return resultCapability.Promise
