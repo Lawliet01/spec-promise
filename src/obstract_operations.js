@@ -150,7 +150,6 @@ function IsPromise(x){
 function RejectPromise(promise, reason){
     console.assert(promise.__PromiseState === "pending")
     let reactions = promise.__PromiseRejectReactions
-    if (!reactions) debugger
     promise.__PromiseResult = reason
     promise.__PromiseFulfillReactions = undefined
     promise.__PromiseRejectReactions = undefined
@@ -161,7 +160,6 @@ function RejectPromise(promise, reason){
 
 // 27.2.1.8 TriggerPromiseReactions
 function TriggerPromiseReactions(reactions,argument) {
-    if (!reactions) debugger
     for (let reaction of reactions) {
         let job = NewPromiseReactionJob(reaction, argument)
         HostEnqueuePromiseJob(job)

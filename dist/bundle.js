@@ -203,7 +203,6 @@
     function RejectPromise(promise, reason){
         console.assert(promise.__PromiseState === "pending");
         let reactions = promise.__PromiseRejectReactions;
-        if (!reactions) debugger
         promise.__PromiseResult = reason;
         promise.__PromiseFulfillReactions = undefined;
         promise.__PromiseRejectReactions = undefined;
@@ -214,7 +213,6 @@
 
     // 27.2.1.8 TriggerPromiseReactions
     function TriggerPromiseReactions(reactions,argument) {
-        if (!reactions) debugger
         for (let reaction of reactions) {
             let job = NewPromiseReactionJob(reaction, argument);
             HostEnqueuePromiseJob(job);
@@ -231,6 +229,7 @@
     }
 
     let Promise$1 = class Promise {
+
         constructor(executor){
             if (!new.target) throw new TypeError("Promise constructor cannot be invoked without 'new'")
             if (typeof executor !== 'function') throw new TypeError("Promise resolver  is not a function")
