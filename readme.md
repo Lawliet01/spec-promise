@@ -2,11 +2,17 @@
 
 spec-promise一个完全基于[ECMAScript标准27.2](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-promise-objects)搭建的Promise，可通过99.3%（609/613）的[test262](https://github.com/tc39/test262)标准符合性测试。
 
-【图】（chrome、我、两个仓库）
+|                                                            | 测试通过率       |
+| ---------------------------------------------------------- | ---------------- |
+| spec-promise                                               | 99.3%（609/613） |
+| [then/Promise](https://github.com/then/promise)            | 63.8%（391/613） |
+| [es6-promise](https://github.com/stefanpenner/es6-promise) | 46.0%（282/613） |
 
 此仓库是《人人都能读标准 —— ECMAScript篇》的附属产品，旨在为读者展示基于标准的算法你可以做些什么。且由于这是一个使用JavaScript实现的、轻量但“五脏俱全”的promise，所以你可以借助它在开发者工具上可视化原生promise的底层实现（配合标准食用更佳哦！）。
 
 【提到人人都能读标准的篇章吧】
+
+<br />
 
 
 ## 使用test262进行测试
